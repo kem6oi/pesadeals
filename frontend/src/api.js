@@ -64,6 +64,19 @@ export const fetchDeals = async (category = 'all', search = '') => {
   }
 };
 
+// Fetch single deal by slug
+export const fetchDealBySlug = async (slug) => {
+  try {
+    const res = await fetch(`${API_BASE}/api/deals/${slug}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.deal;
+  } catch (err) {
+    console.error('API error fetching deal:', err);
+    return null;
+  }
+};
+
 // Track link click and redirect
 export const trackAndOpenDeal = async (deal) => {
   const tracking = getTrackingParams();

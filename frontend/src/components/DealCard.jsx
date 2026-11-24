@@ -1,8 +1,10 @@
 import React from 'react';
-import { CheckCircle2, ArrowRight, Share2, Smartphone, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Share2, Smartphone, Zap } from 'lucide-react';
 
-export default function DealCard({ deal, onSelect, onDirectClaim }) {
+export default function DealCard({ deal, onDirectClaim }) {
   const shareOnWhatsApp = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     const shareUrl = `https://pesadeals.duckdns.org/r/${deal.slug}?utm_source=whatsapp_share`;
     const text = encodeURIComponent(
@@ -24,10 +26,12 @@ export default function DealCard({ deal, onSelect, onDirectClaim }) {
           </span>
         </div>
 
-        {/* Title */}
-        <h2 className="text-base font-bold text-slate-900 leading-snug mb-1.5">
-          {deal.title}
-        </h2>
+        {/* Title links to dedicated deal page */}
+        <Link to={`/deal/${deal.slug}`} className="block group">
+          <h2 className="text-base font-bold text-slate-900 group-hover:text-[#008744] leading-snug mb-1.5 transition-colors">
+            {deal.title}
+          </h2>
+        </Link>
 
         {/* Short Summary */}
         <p className="text-xs text-slate-600 leading-relaxed mb-3">
@@ -50,12 +54,12 @@ export default function DealCard({ deal, onSelect, onDirectClaim }) {
       {/* Action Footer */}
       <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1">
-          <button
-            onClick={() => onSelect(deal)}
+          <Link
+            to={`/deal/${deal.slug}`}
             className="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition-colors"
           >
             How it works
-          </button>
+          </Link>
           <button
             onClick={shareOnWhatsApp}
             className="p-1.5 text-slate-400 hover:text-emerald-600 rounded-lg hover:bg-emerald-50 transition-colors"

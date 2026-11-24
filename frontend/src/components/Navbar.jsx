@@ -1,12 +1,13 @@
 import React from 'react';
-import { ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ShieldCheck, Lock } from 'lucide-react';
 
-export default function Navbar({ onOpenAdmin, isMetaMode }) {
+export default function Navbar({ isMetaMode }) {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)] px-4 py-3">
       <div className="max-w-2xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#008744] flex items-center justify-center text-white font-extrabold text-base shadow-sm">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 rounded-xl bg-[#008744] flex items-center justify-center text-white font-extrabold text-base shadow-sm group-hover:scale-105 transition-transform">
             PD
           </div>
           <div>
@@ -18,7 +19,7 @@ export default function Navbar({ onOpenAdmin, isMetaMode }) {
             </div>
             <p className="text-[11px] text-slate-500 font-medium">Verified Side Hustles & Mobile Gigs</p>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-2">
           {isMetaMode && (
@@ -28,14 +29,14 @@ export default function Navbar({ onOpenAdmin, isMetaMode }) {
             </div>
           )}
 
-          <button
-            onClick={onOpenAdmin}
+          <Link
+            to="/admin"
             className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 bg-slate-50 transition-colors"
             title="Admin Login & Analytics"
           >
             <Lock className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Admin</span>
-          </button>
+          </Link>
         </div>
       </div>
     </header>
