@@ -62,9 +62,11 @@ Whenever a visitor clicks any deal on the mobile site or uses a direct redirect 
 - **Referrer** (Facebook, Instagram, WhatsApp, TikTok, Direct)
 
 ### Real-Time Admin Analytics
-Victor can access the admin dashboard directly:
-1. Visit the platform and click the **Lock icon** in the navbar (or visit with `?admin=1`).
-2. Enter the Admin Secret Key: `victor_deals_2026!`
+The administrator can access the dashboard directly:
+1. Visit the platform and navigate to `/admin` or `/login`.
+2. Enter the Admin credentials:
+   - **Username**: `admin`
+   - **Password**: `pesadeals_admin_2026!`
 3. View:
    - **Total Clicks, Unique Visitors, Today's Clicks**
    - **Deal Conversion Leaderboard**

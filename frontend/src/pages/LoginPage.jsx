@@ -87,7 +87,7 @@ export default function LoginPage({ onLoginSuccess }) {
                   type="text"
                   required
                   autoFocus
-                  placeholder="e.g. victor or admin"
+                  placeholder="e.g. admin"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#008744] transition-colors"

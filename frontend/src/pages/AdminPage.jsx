@@ -9,7 +9,7 @@ export default function AdminPage() {
   const [token, setToken] = useState(
     localStorage.getItem('pesadeals_admin_token') || localStorage.getItem('pesadeals_admin_key') || ''
   );
-  const [username, setUsername] = useState(localStorage.getItem('pesadeals_admin_user') || 'victor');
+  const [username, setUsername] = useState(localStorage.getItem('pesadeals_admin_user') || 'admin');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
 

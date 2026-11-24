@@ -186,30 +186,31 @@ export default function AdminPortal({ onClose, authToken, onLogout }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-6 animate-in fade-in">
-      <div className="w-full max-w-4xl bg-white border border-slate-200 rounded-2xl flex flex-col max-h-[92vh] overflow-hidden shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
-          <div>
-            <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <span>Victor's Deal & Click Manager</span>
-              {isAuthenticated && (
-                <span className="text-[10px] font-bold bg-[#008744]/10 text-[#008744] border border-[#008744]/20 px-2 py-0.5 rounded-full">
-                  Live
-                </span>
-              )}
-            </h2>
-            <p className="text-xs text-slate-500">Track every visitor click and update Kenya deals</p>
-          </div>
+    <div className="w-full max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl flex flex-col shadow-sm overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+        <div>
+          <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <span>Deal & Click Manager</span>
+            {isAuthenticated && (
+              <span className="text-[10px] font-bold bg-[#008744]/10 text-[#008744] border border-[#008744]/20 px-2 py-0.5 rounded-full">
+                Live
+              </span>
+            )}
+          </h2>
+          <p className="text-xs text-slate-500">Track visitor clicks and update deals</p>
+        </div>
+        {onClose && (
           <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-slate-900">
             <X className="w-5 h-5" />
           </button>
-        </div>
+        )}
+      </div>
 
-        {/* Content */}
-        {!isAuthenticated ? (
-          <div className="p-8 max-w-md mx-auto my-auto text-center w-full">
-            <p className="text-sm font-semibold text-slate-700 mb-4">Enter Victor's Admin Secret Key:</p>
+      {/* Content */}
+      {!isAuthenticated ? (
+        <div className="p-8 max-w-md mx-auto my-auto text-center w-full">
+          <p className="text-sm font-semibold text-slate-700 mb-4">Enter Admin Secret Key:</p>
             <form onSubmit={handleLogin} className="space-y-3">
               <input
                 type="password"
@@ -615,6 +616,5 @@ export default function AdminPortal({ onClose, authToken, onLogout }) {
           </div>
         )}
       </div>
-    </div>
-  );
+    );
 }
