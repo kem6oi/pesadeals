@@ -4,16 +4,8 @@ const getBackendUrl = () => {
   if (import.meta.env.VITE_API_BASE_URL) {
     return import.meta.env.VITE_API_BASE_URL;
   }
-  // If running locally or on server
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://127.0.0.1:5060';
-    }
-    // Default to the server backend port or custom backend proxy
-    return `http://${hostname}:5060`;
-  }
-  return 'http://127.0.0.1:5060';
+  // Default production HTTPS backend
+  return 'https://pesadeals.duckdns.org';
 };
 
 export const API_BASE = getBackendUrl();
