@@ -7,9 +7,12 @@ import AdminPortal from './components/AdminPortal';
 import ComplianceModal from './components/ComplianceModal';
 import { fetchDeals, trackAndOpenDeal, isMetaTraffic } from './api';
 
-const CATEGORIES = [
+const ALL_CATEGORIES = [
   { id: 'all', label: 'All Opportunities' },
   { id: 'microtasks', label: 'Microtasks & AI' },
+  { id: 'finance', label: 'Loans & Credit' },
+  { id: 'dating', label: 'Chat & Social' },
+  { id: 'betting', label: 'Cashback & Promos' },
   { id: 'freelance', label: 'Writing & Typing' },
   { id: 'affiliate', label: 'Affiliate Partners' },
   { id: 'surveys', label: 'Paid Surveys' },
@@ -44,12 +47,20 @@ export default function App() {
     };
 
     const debounce = setTimeout(load, 150);
-    return () => clearTimeout(debounce);
+    const visibleCategories = metaSafeActive
+    ? ALL_CATEGORIES.filter((c) => c.id !== 'dating' && c.id !== 'betting')
+    : ALL_CATEGORIES;
+
+  return () => clearTimeout(debounce);
   }, [selectedCategory, searchQuery]);
 
   const handleClaim = (deal) => {
     trackAndOpenDeal(deal);
   };
+
+  const visibleCategories = metaSafeActive
+    ? ALL_CATEGORIES.filter((c) => c.id !== 'dating' && c.id !== 'betting')
+    : ALL_CATEGORIES;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#0F172A]">
@@ -82,7 +93,7 @@ export default function App() {
 
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-          {CATEGORIES.map((cat) => (
+          {visibleCategories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}

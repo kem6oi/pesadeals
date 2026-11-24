@@ -9,10 +9,28 @@ const PORT = process.env.PORT || 5060;
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'victor_deals_2026!';
 
 // Middleware
+const allowedOrigins = [
+  'https://pesadeals.pages.dev',
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:5173'
+];
+
 app.use(cors({
-  origin: '*',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.pages.dev') ||
+      origin.includes('pesadeals')
+    ) {
+      return callback(null, origin);
+    }
+    return callback(null, origin);
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Key', 'X-Visitor-Id']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Key', 'X-Visitor-Id', 'Accept']
 }));
 app.use(express.json());
 
