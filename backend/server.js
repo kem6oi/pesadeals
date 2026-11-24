@@ -4,9 +4,27 @@ const cors = require('cors');
 const { UAParser } = require('ua-parser-js');
 const db = require('./db');
 
+const crypto = require('crypto');
+
 const app = express();
 const PORT = process.env.PORT || 5060;
-const ADMIN_SECRET = process.env.ADMIN_SECRET || 'victor_deals_2026!';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'victor';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'victor_deals_2026!';
+const ADMIN_SECRET = process.env.ADMIN_SECRET || ADMIN_PASSWORD;
+
+// In-memory admin session tokens
+const validTokens = new Set();
+
+function createAdminSession(username) {
+  const token = 'pds_' + crypto.randomBytes(24).toString('hex');
+  validTokens.add(token);
+  return token;
+}
+
+function isValidAdminAuth(keyOrToken) {
+  if (!keyOrToken) return false;
+  return keyOrToken === ADMIN_SECRET || keyOrToken === ADMIN_PASSWORD || validTokens.has(keyOrToken);
+}
 
 // Middleware
 const allowedOrigins = [
@@ -72,9 +90,13 @@ function isMetaCrawlerOrAd(req) {
 
 // Middleware: Admin auth
 function requireAdmin(req, res, next) {
-  const key = req.headers['x-admin-key'] || req.query.admin_key;
-  if (!key || key !== ADMIN_SECRET) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid Admin Secret Key' });
+  const authHeader = req.headers['authorization'];
+  let keyOrToken = req.headers['x-admin-key'] || req.query.admin_key;
+  if (!keyOrToken && authHeader && authHeader.startsWith('Bearer ')) {
+    keyOrToken = authHeader.substring(7).trim();
+  }
+  if (!isValidAdminAuth(keyOrToken)) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid credentials or session expired' });
   }
   next();
 }
@@ -291,13 +313,41 @@ app.get('/r/:slug', (req, res) => {
 // Admin Endpoints
 // -----------------------------------------------------------------------------
 
-// Verify Admin Key
-app.post('/api/admin/verify', (req, res) => {
-  const { secret } = req.body;
-  if (secret === ADMIN_SECRET) {
-    return res.json({ valid: true });
+// Admin Login with Username & Password
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body || {};
+  const normalizedUser = (username || '').trim().toLowerCase();
+
+  const isUserValid = normalizedUser === ADMIN_USERNAME.toLowerCase() || normalizedUser === 'admin';
+  const isPassValid = password === ADMIN_PASSWORD || password === ADMIN_SECRET;
+
+  if (isUserValid && isPassValid) {
+    const token = createAdminSession(normalizedUser);
+    return res.json({
+      success: true,
+      token,
+      username: normalizedUser === 'admin' ? 'admin' : ADMIN_USERNAME,
+      message: 'Login successful'
+    });
   }
-  return res.status(401).json({ valid: false, error: 'Invalid secret' });
+
+  return res.status(401).json({
+    success: false,
+    error: 'Invalid username or password'
+  });
+});
+
+// Verify Admin Session Token or Key
+app.post('/api/admin/verify', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  let keyOrToken = (req.body && (req.body.token || req.body.secret)) || req.headers['x-admin-key'];
+  if (!keyOrToken && authHeader && authHeader.startsWith('Bearer ')) {
+    keyOrToken = authHeader.substring(7).trim();
+  }
+  if (isValidAdminAuth(keyOrToken)) {
+    return res.json({ valid: true, username: ADMIN_USERNAME });
+  }
+  return res.status(401).json({ valid: false, error: 'Invalid or expired session' });
 });
 
 // Get all deals for Admin (including inactive & meta restricted)

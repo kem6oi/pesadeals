@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import DealDetailPage from './pages/DealDetailPage';
 import AdminPage from './pages/AdminPage';
+import LoginPage from './pages/LoginPage';
 import LegalPage from './pages/LegalPage';
 import { isMetaTraffic } from './api';
 
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/deal/:slug" element={<DealDetailPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/legal/:type" element={<LegalPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

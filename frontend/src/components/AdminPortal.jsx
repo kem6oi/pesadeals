@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Edit3, BarChart3, ListOrdered, Smartphone, Globe, ExternalLink, RefreshCw } from 'lucide-react';
 import { API_BASE } from '../api';
 
-export default function AdminPortal({ onClose }) {
-  const [secret, setSecret] = useState(localStorage.getItem('pesadeals_admin_key') || '');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+export default function AdminPortal({ onClose, authToken, onLogout }) {
+  const [secret, setSecret] = useState(
+    authToken || localStorage.getItem('pesadeals_admin_token') || localStorage.getItem('pesadeals_admin_key') || ''
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(authToken));
   const [tab, setTab] = useState('analytics'); // 'analytics' | 'deals' | 'new'
   const [loading, setLoading] = useState(false);
   const [analytics, setAnalytics] = useState(null);
@@ -31,12 +33,15 @@ export default function AdminPortal({ onClose }) {
     try {
       const res = await fetch(`${API_BASE}/api/admin/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ secret: keyToTest })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${keyToTest}`,
+          'X-Admin-Key': keyToTest
+        },
+        body: JSON.stringify({ token: keyToTest, secret: keyToTest })
       });
       if (res.ok) {
         setIsAuthenticated(true);
-        localStorage.setItem('pesadeals_admin_key', keyToTest);
         loadData(keyToTest);
       } else {
         setIsAuthenticated(false);
@@ -47,14 +52,19 @@ export default function AdminPortal({ onClose }) {
   };
 
   useEffect(() => {
-    if (secret) {
-      checkAuth(secret);
+    const activeKey = authToken || secret;
+    if (activeKey) {
+      checkAuth(activeKey);
     }
-  }, []);
+  }, [authToken]);
 
   const loadData = async (key) => {
     setLoading(true);
-    const authHeader = { 'X-Admin-Key': key || secret };
+    const activeKey = key || authToken || secret;
+    const authHeader = {
+      'Authorization': `Bearer ${activeKey}`,
+      'X-Admin-Key': activeKey
+    };
     try {
       const [resAnalytics, resDeals] = await Promise.all([
         fetch(`${API_BASE}/api/admin/analytics`, { headers: authHeader }),
@@ -95,11 +105,13 @@ export default function AdminPortal({ onClose }) {
         : `${API_BASE}/api/admin/deals`;
       const method = editingDeal ? 'PUT' : 'POST';
 
+      const activeKey = authToken || secret;
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'X-Admin-Key': secret
+          'Authorization': `Bearer ${activeKey}`,
+          'X-Admin-Key': activeKey
         },
         body: JSON.stringify(payload)
       });
@@ -108,7 +120,7 @@ export default function AdminPortal({ onClose }) {
         setEditingDeal(null);
         setTab('deals');
         resetForm();
-        loadData(secret);
+        loadData(activeKey);
       } else {
         alert('Failed to save deal');
       }
@@ -122,11 +134,15 @@ export default function AdminPortal({ onClose }) {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this deal?')) return;
     try {
+      const activeKey = authToken || secret;
       await fetch(`${API_BASE}/api/admin/deals/${id}`, {
         method: 'DELETE',
-        headers: { 'X-Admin-Key': secret }
+        headers: {
+          'Authorization': `Bearer ${activeKey}`,
+          'X-Admin-Key': activeKey
+        }
       });
-      loadData(secret);
+      loadData(activeKey);
     } catch (err) {
       console.error(err);
     }
