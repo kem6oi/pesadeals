@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, Lock } from 'lucide-react';
+import { ShieldCheck, Lock, Info } from 'lucide-react';
 
 export default function Navbar({ isMetaMode }) {
   return (
@@ -17,7 +17,7 @@ export default function Navbar({ isMetaMode }) {
                 KENYA 🇰🇪
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium">Verified Side Hustles & Mobile Gigs</p>
+            <p className="text-[11px] text-slate-500 font-medium">Independent Side Hustle Tips & Guides</p>
           </div>
         </Link>
 
@@ -25,7 +25,7 @@ export default function Navbar({ isMetaMode }) {
           {isMetaMode && (
             <div className="hidden sm:flex items-center gap-1 text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
               <ShieldCheck className="w-3.5 h-3.5 text-[#008744]" />
-              <span>Verified Directory</span>
+              <span>Independent Directory</span>
             </div>
           )}
 

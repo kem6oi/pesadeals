@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Search, CheckCircle2 } from 'lucide-react';
+import { Search, Info, CheckCircle2 } from 'lucide-react';
 import DealCard from '../components/DealCard';
 import { fetchDeals, trackAndOpenDeal, isMetaTraffic } from '../api';
 
 const ALL_CATEGORIES = [
-  { id: 'all', label: 'All Opportunities' },
+  { id: 'all', label: 'All Tips & Ideas' },
   { id: 'microtasks', label: 'Microtasks & AI' },
   { id: 'finance', label: 'Loans & Credit' },
   { id: 'dating', label: 'Chat & Social' },
   { id: 'betting', label: 'Cashback & Promos' },
   { id: 'freelance', label: 'Writing & Typing' },
-  { id: 'affiliate', label: 'Affiliate Partners' },
+  { id: 'affiliate', label: 'E-Commerce & Reselling' },
   { id: 'surveys', label: 'Paid Surveys' },
 ];
 
@@ -43,11 +43,13 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Trust Notice Header */}
-      <div className="bg-emerald-50 border-b border-emerald-100 px-4 py-2 text-center">
-        <p className="text-[11px] sm:text-xs font-semibold text-emerald-900 max-w-2xl mx-auto flex items-center justify-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-[#008744] shrink-0" />
-          <span>Verified online gigs for Kenyans. 100% free to start — no registration fees required.</span>
+      {/* Non-Affiliation & Independent Tips Header */}
+      <div className="bg-amber-50/90 border-b border-amber-200 px-4 py-2.5 text-center">
+        <p className="text-[11px] sm:text-xs font-semibold text-amber-950 max-w-2xl mx-auto flex items-center justify-center gap-1.5">
+          <Info className="w-4 h-4 text-amber-700 shrink-0" />
+          <span>
+            <strong>Notice:</strong> We are not affiliated with any platform listed — we only share tips, ideas, and free guides.
+          </span>
         </p>
       </div>
 
@@ -58,7 +60,7 @@ export default function HomePage() {
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search deals (e.g. TaskArena, M-Pesa, surveys)..."
+            placeholder="Search hustle tips (e.g. TaskArena, typing, surveys)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#008744] shadow-sm transition-colors"
@@ -87,10 +89,10 @@ export default function HomePage() {
       <main className="px-4 py-2 max-w-2xl mx-auto w-full">
         <div className="flex items-center justify-between mb-3 px-1">
           <span className="text-xs font-bold text-slate-700">
-            {loading ? 'Loading deals...' : `${deals.length} Active Opportunities`}
+            {loading ? 'Finding tips...' : `${deals.length} Money-Making Tips & Ideas`}
           </span>
           <span className="text-[11px] text-[#008744] font-bold">
-            M-Pesa Supported
+            Free Informational Guides
           </span>
         </div>
 
@@ -102,7 +104,7 @@ export default function HomePage() {
           </div>
         ) : deals.length === 0 ? (
           <div className="py-12 text-center bg-white rounded-2xl border border-slate-200 p-6 my-4 shadow-sm">
-            <p className="text-sm font-bold text-slate-900 mb-1">No deals match your search</p>
+            <p className="text-sm font-bold text-slate-900 mb-1">No tips match your search</p>
             <p className="text-xs text-slate-500 mb-4">Try clearing your search query or pick another category.</p>
             <button
               onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}

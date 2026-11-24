@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, CheckCircle2, ShieldAlert, Zap, Share2, Smartphone } from 'lucide-react';
+import { ArrowLeft, ExternalLink, CheckCircle2, ShieldAlert, Zap, Share2, Info } from 'lucide-react';
 import { fetchDealBySlug, trackAndOpenDeal } from '../api';
 
 export default function DealDetailPage() {
@@ -29,7 +29,7 @@ export default function DealDetailPage() {
     if (!deal) return;
     const shareUrl = `https://pesadeals.duckdns.org/r/${deal.slug}?utm_source=whatsapp_share`;
     const text = encodeURIComponent(
-      `Check out this verified Kenya deal: "${deal.title}" (Earns ${deal.payout_range} via ${deal.payment_method}). Apply here: ${shareUrl}`
+      `Check out this Kenyan hustle tip: "${deal.title}" (Estimated ${deal.payout_range} via ${deal.payment_method}). Guide here: ${shareUrl}`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
@@ -47,18 +47,20 @@ export default function DealDetailPage() {
   if (!deal) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-lg font-bold text-slate-900 mb-2">Deal Not Found</h1>
-        <p className="text-xs text-slate-500 mb-6">This deal may have expired or been updated.</p>
+        <h1 className="text-lg font-bold text-slate-900 mb-2">Tip Not Found</h1>
+        <p className="text-xs text-slate-500 mb-6">This guide may have been updated or moved.</p>
         <Link
           to="/"
           className="inline-flex items-center gap-2 bg-[#008744] hover:bg-[#007038] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to All Deals</span>
+          <span>Back to All Tips</span>
         </Link>
       </div>
     );
   }
+
+  const platformName = deal.title.split('—')[0].trim();
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4 sm:py-6">
@@ -69,16 +71,16 @@ export default function DealDetailPage() {
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-xl shadow-sm transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>All Deals</span>
+          <span>All Tips</span>
         </Link>
 
         <button
           onClick={handleWhatsAppShare}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 px-3 py-1.5 rounded-xl transition-colors"
-          title="Share deal on WhatsApp"
+          title="Share tip on WhatsApp"
         >
           <Share2 className="w-3.5 h-3.5 text-[#008744]" />
-          <span>Share Deal</span>
+          <span>Share Tip</span>
         </button>
       </div>
 
@@ -96,9 +98,17 @@ export default function DealDetailPage() {
           )}
         </div>
 
-        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight mb-3">
+        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight mb-2">
           {deal.title}
         </h1>
+
+        {/* Non-Affiliation Box */}
+        <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-start gap-2 mb-4 text-[11px] text-amber-950">
+          <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+          <span>
+            <strong>Disclaimer:</strong> We are not affiliated with {platformName} or its owners. We only share independent tips and guides on how Kenyans can use it.
+          </span>
+        </div>
 
         <p className="text-sm text-slate-600 leading-relaxed mb-5">
           {deal.summary}
@@ -107,7 +117,7 @@ export default function DealDetailPage() {
         {/* Highlight Stats Box */}
         <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 mb-6">
           <div>
-            <span className="text-xs text-slate-500 font-semibold block mb-0.5">Est. Earning Potential</span>
+            <span className="text-xs text-slate-500 font-semibold block mb-0.5">Reported Earnings</span>
             <span className="text-sm sm:text-base font-black text-slate-900 tabular-nums">
               {deal.payout_range}
             </span>
@@ -125,7 +135,7 @@ export default function DealDetailPage() {
         {deal.description && (
           <div className="mb-6">
             <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
-              Full Overview
+              Full Guide & Tips
             </h2>
             <p className="text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/50 p-4 rounded-xl border border-slate-100">
               {deal.description}
@@ -137,7 +147,7 @@ export default function DealDetailPage() {
         {deal.requirements && deal.requirements.length > 0 && (
           <div className="mb-6">
             <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
-              What You Need to Start
+              Requirements
             </h2>
             <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
               {deal.requirements.map((req, i) => (
@@ -173,7 +183,7 @@ export default function DealDetailPage() {
         <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 mb-6">
           <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
           <p className="text-xs text-amber-900 leading-normal font-medium">
-            <strong>Security Notice:</strong> All legitimate opportunities on PesaDeals are free to join. Never send money or pay registration fees for online work.
+            <strong>Security Notice:</strong> All tips and opportunities we share are free to explore. Never send money or pay registration fees for online work.
           </p>
         </div>
 
@@ -183,11 +193,11 @@ export default function DealDetailPage() {
             onClick={handleClaim}
             className="w-full flex items-center justify-center gap-2 bg-[#008744] hover:bg-[#007038] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-95"
           >
-            <span>Proceed to Official Registration</span>
+            <span>Visit {platformName} (External Website)</span>
             <ExternalLink className="w-4 h-4" />
           </button>
           <p className="text-[11px] text-center text-slate-400">
-            Clicking opens the official provider portal in a new tab.
+            Opens external third-party website in a new window.
           </p>
         </div>
       </article>
@@ -198,7 +208,7 @@ export default function DealDetailPage() {
           to="/"
           className="text-xs font-bold text-[#008744] hover:underline"
         >
-          ← Browse More Kenyan Deals
+          ← Browse More Money-Making Tips
         </Link>
       </div>
     </div>

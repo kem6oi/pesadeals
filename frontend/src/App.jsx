@@ -31,12 +31,12 @@ export default function App() {
         <footer className="mt-auto border-t border-slate-200 bg-white px-4 py-6 text-center text-xs text-slate-500">
           <div className="max-w-2xl mx-auto space-y-3">
             <p className="text-[11px] text-slate-500 leading-relaxed max-w-xl mx-auto">
-              PesaDeals Kenya is an informational index of verified remote work and affiliate opportunities for Kenyans. We do not charge registration fees. Outcomes vary based on individual skill and commitment.
+              <strong className="text-slate-800">Non-Affiliation Notice:</strong> PesaDeals Kenya is not affiliated, associated, authorized, endorsed by, or in any way officially connected with any platform, company, or third-party service mentioned on this site. We do not represent any platform; we simply share independent tips, educational guides, and hustle ideas for Kenyans. Never pay any money to start online tasks.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-600 pt-2 border-t border-slate-100">
               <Link to="/legal/disclaimer" className="hover:text-[#008744] transition-colors">
-                Earnings Disclaimer
+                Non-Affiliation & Disclaimer
               </Link>
               <Link to="/legal/privacy" className="hover:text-[#008744] transition-colors">
                 Privacy Policy
@@ -50,7 +50,7 @@ export default function App() {
             </div>
 
             <p className="text-[10px] text-slate-400 pt-1">
-              © {new Date().getFullYear()} PesaDeals Kenya. All rights reserved.
+              © {new Date().getFullYear()} PesaDeals Kenya. Independent educational tips and community resources.
             </p>
           </div>
         </footer>
