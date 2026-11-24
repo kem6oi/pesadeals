@@ -1,36 +1,36 @@
 import React from 'react';
-import { ShieldCheck, Lock, Sparkles } from 'lucide-react';
+import { ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
 
 export default function Navbar({ onOpenAdmin, isMetaMode }) {
   return (
-    <header className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3">
-      <div className="max-w-3xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-lg">
-            P
+    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)] px-4 py-3">
+      <div className="max-w-2xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-[#008744] flex items-center justify-center text-white font-extrabold text-base shadow-sm">
+            PD
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-base tracking-tight text-white">PesaDeals</span>
-              <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-medium border border-emerald-500/20">
-                Kenya 🇰🇪
+              <span className="font-extrabold text-slate-900 text-base tracking-tight">PesaDeals</span>
+              <span className="text-[11px] font-bold text-[#008744] bg-[#008744]/10 border border-[#008744]/20 px-1.5 py-0.5 rounded-md">
+                KENYA 🇰🇪
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 leading-none mt-0.5">Verified Remote Gigs & Side Hustles</p>
+            <p className="text-[11px] text-slate-500 font-medium">Verified Side Hustles & Mobile Gigs</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {isMetaMode && (
-            <div className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Meta Safe</span>
+            <div className="hidden sm:flex items-center gap-1 text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#008744]" />
+              <span>Verified Directory</span>
             </div>
           )}
 
           <button
             onClick={onOpenAdmin}
-            className="flex items-center gap-1 text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 bg-slate-50 transition-colors"
             title="Admin Login & Analytics"
           >
             <Lock className="w-3.5 h-3.5" />

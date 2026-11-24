@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Edit3, BarChart3, ListOrdered, Shield, Smartphone, Globe, ExternalLink, RefreshCw } from 'lucide-react';
+import { X, Plus, Trash2, Edit3, BarChart3, ListOrdered, Smartphone, Globe, ExternalLink, RefreshCw } from 'lucide-react';
 import { API_BASE } from '../api';
 
 export default function AdminPortal({ onClose }) {
@@ -15,16 +15,16 @@ export default function AdminPortal({ onClose }) {
   const [formData, setFormData] = useState({
     title: '',
     category: 'microtasks',
-    payout_range: '',
-    payment_method: 'M-Pesa',
+    payout_range: 'Ksh 1,000 – 3,000 / day',
+    payment_method: 'Direct M-Pesa',
     badge: 'Popular',
     summary: '',
     description: '',
     affiliate_url: '',
     is_meta_safe: true,
     is_featured: false,
-    requirements: 'Smartphone\nBasic English',
-    steps: 'Sign up\nComplete profile\nReceive payout'
+    requirements: 'Smartphone with internet\nSafaricom M-Pesa line',
+    steps: 'Sign up with verified phone\nComplete onboarding test\nReceive direct payout'
   });
 
   const checkAuth = async (keyToTest) => {
@@ -156,55 +156,55 @@ export default function AdminPortal({ onClose }) {
     setFormData({
       title: '',
       category: 'microtasks',
-      payout_range: '',
-      payment_method: 'M-Pesa',
+      payout_range: 'Ksh 1,000 – 3,000 / day',
+      payment_method: 'Direct M-Pesa',
       badge: 'Popular',
       summary: '',
       description: '',
       affiliate_url: '',
       is_meta_safe: true,
       is_featured: false,
-      requirements: 'Smartphone\nBasic English',
-      steps: 'Sign up\nComplete profile\nReceive payout'
+      requirements: 'Smartphone with internet\nSafaricom M-Pesa line',
+      steps: 'Sign up with verified phone\nComplete onboarding test\nReceive direct payout'
     });
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-6 animate-in fade-in">
-      <div className="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl flex flex-col max-h-[92vh] overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-6 animate-in fade-in">
+      <div className="w-full max-w-4xl bg-white border border-slate-200 rounded-2xl flex flex-col max-h-[92vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
           <div>
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <span>Victor's Deal & Traffic Control</span>
+            <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <span>Victor's Deal & Click Manager</span>
               {isAuthenticated && (
-                <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800/40 px-2 py-0.5 rounded-full">
-                  Connected
+                <span className="text-[10px] font-bold bg-[#008744]/10 text-[#008744] border border-[#008744]/20 px-2 py-0.5 rounded-full">
+                  Live
                 </span>
               )}
             </h2>
-            <p className="text-xs text-slate-400">Manage affiliate links and track every user click</p>
+            <p className="text-xs text-slate-500">Track every visitor click and update Kenya deals</p>
           </div>
-          <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-slate-900">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
         {!isAuthenticated ? (
-          <div className="p-6 max-w-md mx-auto my-auto text-center w-full">
-            <p className="text-sm text-slate-300 mb-4">Enter Victor's Admin Secret Key to proceed:</p>
+          <div className="p-8 max-w-md mx-auto my-auto text-center w-full">
+            <p className="text-sm font-semibold text-slate-700 mb-4">Enter Victor's Admin Secret Key:</p>
             <form onSubmit={handleLogin} className="space-y-3">
               <input
                 type="password"
                 placeholder="Enter secret key..."
                 value={secret}
                 onChange={(e) => setSecret(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-[#008744]"
               />
               <button
                 type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm py-2.5 rounded-xl transition-colors"
+                className="w-full bg-[#008744] hover:bg-[#007038] text-white font-bold text-sm py-2.5 rounded-xl transition-colors shadow-sm"
               >
                 Access Dashboard
               </button>
@@ -213,47 +213,46 @@ export default function AdminPortal({ onClose }) {
         ) : (
           <div className="flex-1 overflow-y-auto">
             {/* Tabs */}
-            <div className="flex items-center gap-2 px-5 pt-3 border-b border-slate-800 bg-slate-950/50">
+            <div className="flex items-center gap-4 px-5 pt-3 border-b border-slate-200 bg-slate-50">
               <button
                 onClick={() => { setTab('analytics'); loadData(secret); }}
-                className={`flex items-center gap-1.5 text-xs font-medium pb-3 border-b-2 transition-all ${
+                className={`flex items-center gap-1.5 text-xs font-bold pb-3 border-b-2 transition-all ${
                   tab === 'analytics'
-                    ? 'border-emerald-500 text-emerald-400'
-                    : 'border-transparent text-slate-400 hover:text-white'
+                    ? 'border-[#008744] text-[#008744]'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
-                <span>Click Tracking & Traffic</span>
+                <span>Live Click Tracking</span>
               </button>
 
               <button
                 onClick={() => setTab('deals')}
-                className={`flex items-center gap-1.5 text-xs font-medium pb-3 border-b-2 transition-all ${
+                className={`flex items-center gap-1.5 text-xs font-bold pb-3 border-b-2 transition-all ${
                   tab === 'deals'
-                    ? 'border-emerald-500 text-emerald-400'
-                    : 'border-transparent text-slate-400 hover:text-white'
+                    ? 'border-[#008744] text-[#008744]'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
                 }`}
               >
                 <ListOrdered className="w-4 h-4" />
-                <span>Active Deals ({deals.length})</span>
+                <span>All Deals ({deals.length})</span>
               </button>
 
               <button
                 onClick={() => { resetForm(); setTab('new'); }}
-                className={`flex items-center gap-1.5 text-xs font-medium pb-3 border-b-2 transition-all ${
+                className={`flex items-center gap-1.5 text-xs font-bold pb-3 border-b-2 transition-all ${
                   tab === 'new'
-                    ? 'border-emerald-500 text-emerald-400'
-                    : 'border-transparent text-slate-400 hover:text-white'
+                    ? 'border-[#008744] text-[#008744]'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
                 }`}
               >
                 <Plus className="w-4 h-4" />
-                <span>{editingDeal ? 'Edit Deal' : 'Post New Deal'}</span>
+                <span>{editingDeal ? 'Edit Deal' : 'Add New Deal'}</span>
               </button>
 
               <button
                 onClick={() => loadData(secret)}
-                className="ml-auto text-xs text-slate-400 hover:text-white pb-3 flex items-center gap-1"
-                title="Refresh Data"
+                className="ml-auto text-xs font-semibold text-slate-500 hover:text-slate-900 pb-3 flex items-center gap-1"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
                 <span>Refresh</span>
@@ -265,21 +264,21 @@ export default function AdminPortal({ onClose }) {
               <div className="p-5 space-y-6">
                 {/* Metric Summary Cards */}
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span className="text-xs text-slate-400 block mb-1">Total Link Clicks</span>
-                    <span className="text-2xl font-bold text-white tabular-nums">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span className="text-xs text-slate-500 font-semibold block mb-1">Total Link Clicks</span>
+                    <span className="text-2xl font-black text-slate-900 tabular-nums">
                       {analytics.summary.totalClicks}
                     </span>
                   </div>
-                  <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span className="text-xs text-slate-400 block mb-1">Unique Visitors</span>
-                    <span className="text-2xl font-bold text-emerald-400 tabular-nums">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span className="text-xs text-slate-500 font-semibold block mb-1">Unique Visitors</span>
+                    <span className="text-2xl font-black text-[#008744] tabular-nums">
                       {analytics.summary.uniqueVisitors}
                     </span>
                   </div>
-                  <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span className="text-xs text-slate-400 block mb-1">Clicks Today</span>
-                    <span className="text-2xl font-bold text-cyan-400 tabular-nums">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span className="text-xs text-slate-500 font-semibold block mb-1">Clicks Today</span>
+                    <span className="text-2xl font-black text-amber-600 tabular-nums">
                       {analytics.summary.todayClicks}
                     </span>
                   </div>
@@ -287,12 +286,12 @@ export default function AdminPortal({ onClose }) {
 
                 {/* Top Deals by Conversion */}
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    Deal Performance & Click Volume
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                    Deal Conversion Leaderboard
                   </h3>
-                  <div className="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden text-xs">
+                  <div className="bg-white border border-slate-200 rounded-xl overflow-hidden text-xs">
                     <table className="w-full text-left">
-                      <thead className="bg-slate-900/60 text-slate-400 border-b border-slate-800">
+                      <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold">
                         <tr>
                           <th className="p-3">Deal Title</th>
                           <th className="p-3">Category</th>
@@ -300,15 +299,15 @@ export default function AdminPortal({ onClose }) {
                           <th className="p-3 text-right">Unique Users</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                      <tbody className="divide-y divide-slate-100 text-slate-700">
                         {analytics.topDeals.map((d) => (
-                          <tr key={d.id} className="hover:bg-slate-900/30">
-                            <td className="p-3 font-medium text-white">{d.title}</td>
-                            <td className="p-3 capitalize text-slate-400">{d.category}</td>
-                            <td className="p-3 text-right font-bold text-emerald-400 tabular-nums">
+                          <tr key={d.id} className="hover:bg-slate-50">
+                            <td className="p-3 font-semibold text-slate-900">{d.title}</td>
+                            <td className="p-3 capitalize text-slate-500">{d.category}</td>
+                            <td className="p-3 text-right font-bold text-[#008744] tabular-nums">
                               {d.tracked_clicks}
                             </td>
-                            <td className="p-3 text-right text-slate-300 tabular-nums">
+                            <td className="p-3 text-right font-medium text-slate-600 tabular-nums">
                               {d.unique_users}
                             </td>
                           </tr>
@@ -318,22 +317,21 @@ export default function AdminPortal({ onClose }) {
                   </div>
                 </div>
 
-                {/* Traffic Source & Device Breakdown */}
+                {/* Traffic Attribution & Devices */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Traffic Sources */}
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                      Traffic Attribution (Meta Ads / Social)
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                      Traffic Attribution (Meta Ads / WhatsApp / Direct)
                     </h3>
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs space-y-2">
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-2">
                       {analytics.trafficSources.length === 0 ? (
-                        <p className="text-slate-500">No clicks tracked yet.</p>
+                        <p className="text-slate-400">No clicks recorded yet.</p>
                       ) : (
                         analytics.trafficSources.map((s, i) => (
-                          <div key={i} className="flex items-center justify-between py-1 border-b border-slate-800/40 last:border-0">
-                            <span className="capitalize font-medium text-slate-300">{s.source_channel}</span>
+                          <div key={i} className="flex items-center justify-between py-1 border-b border-slate-200/60 last:border-0">
+                            <span className="capitalize font-semibold text-slate-800">{s.source_channel}</span>
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-white tabular-nums">{s.clicks} clicks</span>
+                              <span className="font-bold text-[#008744] tabular-nums">{s.clicks} clicks</span>
                               <span className="text-[11px] text-slate-500 tabular-nums">({s.unique_visitors} unique)</span>
                             </div>
                           </div>
@@ -342,16 +340,15 @@ export default function AdminPortal({ onClose }) {
                     </div>
                   </div>
 
-                  {/* Device breakdown */}
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                      Devices Used
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                      Devices Breakdown
                     </h3>
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs space-y-2">
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-2">
                       {analytics.devices.map((dev, i) => (
-                        <div key={i} className="flex items-center justify-between py-1 border-b border-slate-800/40 last:border-0">
-                          <span className="capitalize font-medium text-slate-300">{dev.device_type}</span>
-                          <span className="font-bold text-emerald-400 tabular-nums">{dev.clicks} clicks</span>
+                        <div key={i} className="flex items-center justify-between py-1 border-b border-slate-200/60 last:border-0">
+                          <span className="capitalize font-semibold text-slate-800">{dev.device_type}</span>
+                          <span className="font-bold text-slate-900 tabular-nums">{dev.clicks} clicks</span>
                         </div>
                       ))}
                     </div>
@@ -360,31 +357,31 @@ export default function AdminPortal({ onClose }) {
 
                 {/* Real-time Click Stream */}
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    Recent Click Log (Live Feed)
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                    Live Real-Time Click Log (Last 50 Events)
                   </h3>
-                  <div className="bg-slate-950 border border-slate-800 rounded-xl overflow-x-auto text-[11px]">
+                  <div className="bg-white border border-slate-200 rounded-xl overflow-x-auto text-[11px]">
                     <table className="w-full text-left whitespace-nowrap">
-                      <thead className="bg-slate-900/60 text-slate-400 border-b border-slate-800">
+                      <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold">
                         <tr>
-                          <th className="p-2.5">Time</th>
+                          <th className="p-2.5">Timestamp</th>
                           <th className="p-2.5">Deal</th>
-                          <th className="p-2.5">Device</th>
+                          <th className="p-2.5">Device & Browser</th>
                           <th className="p-2.5">Source / UTM</th>
-                          <th className="p-2.5">IP Address</th>
+                          <th className="p-2.5">IP</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/50 text-slate-300">
+                      <tbody className="divide-y divide-slate-100 text-slate-700">
                         {analytics.recentClicks.map((c) => (
-                          <tr key={c.id} className="hover:bg-slate-900/20">
-                            <td className="p-2.5 text-slate-400">{c.created_at}</td>
-                            <td className="p-2.5 font-medium text-white">{c.deal_name || `Deal #${c.deal_id}`}</td>
+                          <tr key={c.id} className="hover:bg-slate-50">
+                            <td className="p-2.5 text-slate-500">{c.created_at}</td>
+                            <td className="p-2.5 font-bold text-slate-900">{c.deal_name || `Deal #${c.deal_id}`}</td>
                             <td className="p-2.5 capitalize">{c.device_type} ({c.browser})</td>
                             <td className="p-2.5">
-                              <span className="text-emerald-400">{c.utm_source || 'direct'}</span>
+                              <span className="font-semibold text-[#008744]">{c.utm_source || 'direct'}</span>
                               {c.utm_campaign && <span className="text-slate-500"> / {c.utm_campaign}</span>}
                             </td>
-                            <td className="p-2.5 text-slate-400 font-mono">{c.ip_address}</td>
+                            <td className="p-2.5 font-mono text-slate-500">{c.ip_address}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -394,33 +391,33 @@ export default function AdminPortal({ onClose }) {
               </div>
             )}
 
-            {/* TAB: DEALS MANAGEMENT */}
+            {/* TAB: DEALS LIST */}
             {tab === 'deals' && (
               <div className="p-5 space-y-3">
                 {deals.map((d) => (
                   <div
                     key={d.id}
-                    className="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between gap-3 text-xs"
+                    className="bg-white border border-slate-200 rounded-xl p-3.5 flex items-center justify-between gap-3 text-xs shadow-sm"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-white text-sm">{d.title}</span>
+                        <span className="font-bold text-slate-900 text-sm">{d.title}</span>
                         {d.is_meta_safe ? (
-                          <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800/40 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded">
                             Meta Ad Safe
                           </span>
                         ) : (
-                          <span className="text-[10px] bg-amber-950 text-amber-400 border border-amber-800/40 px-1.5 py-0.5 rounded">
-                            Organic / Gated Only
+                          <span className="text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded">
+                            Organic Only
                           </span>
                         )}
                         <span className="text-[10px] text-slate-500 uppercase">{d.category}</span>
                       </div>
-                      <p className="text-slate-400 line-clamp-1 mb-1">{d.summary}</p>
+                      <p className="text-slate-600 line-clamp-1 mb-1">{d.summary}</p>
                       <div className="flex items-center gap-3 text-[11px] text-slate-500">
-                        <span className="text-emerald-400 font-medium tabular-nums">{d.payout_range}</span>
-                        <span>Clicks: {d.click_count || 0}</span>
-                        <a href={d.affiliate_url} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white flex items-center gap-1">
+                        <span className="text-[#008744] font-bold tabular-nums">{d.payout_range}</span>
+                        <span>Total Clicks: {d.click_count || 0}</span>
+                        <a href={d.affiliate_url} target="_blank" rel="noreferrer" className="text-slate-600 hover:text-slate-900 flex items-center gap-1 font-medium">
                           <span>Link</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
@@ -430,14 +427,14 @@ export default function AdminPortal({ onClose }) {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => startEdit(d)}
-                        className="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-lg transition-colors"
+                        className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200 transition-colors"
                         title="Edit"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(d.id)}
-                        className="p-2 bg-slate-900 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 rounded-lg transition-colors"
+                        className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-lg border border-slate-200 transition-colors"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -453,25 +450,25 @@ export default function AdminPortal({ onClose }) {
               <form onSubmit={handleSaveDeal} className="p-5 space-y-4 max-w-2xl mx-auto text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Deal Title *</label>
+                    <label className="block text-slate-700 font-bold mb-1">Deal Title *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Swahili Transcription Gigs"
+                      placeholder="e.g. Swahili Speech Annotation"
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Category</label>
+                    <label className="block text-slate-700 font-bold mb-1">Category</label>
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     >
-                      <option value="microtasks">Microtasks</option>
-                      <option value="freelance">Freelance</option>
+                      <option value="microtasks">Microtasks & AI</option>
+                      <option value="freelance">Freelance & Writing</option>
                       <option value="affiliate">Affiliate Partner</option>
                       <option value="surveys">Paid Surveys</option>
                       <option value="apps">Mobile Apps</option>
@@ -481,123 +478,118 @@ export default function AdminPortal({ onClose }) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Est. Payout Range *</label>
+                    <label className="block text-slate-700 font-bold mb-1">Earning Range *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. KES 800 - 2,500 / day"
+                      placeholder="Ksh 1,500 – 3,500 / day"
                       value={formData.payout_range}
                       onChange={(e) => setFormData({ ...formData, payout_range: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Payment Method</label>
+                    <label className="block text-slate-700 font-bold mb-1">Payment Method</label>
                     <input
                       type="text"
-                      placeholder="M-Pesa / Airtm / Bank"
+                      placeholder="Direct M-Pesa"
                       value={formData.payment_method}
                       onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Badge Tag</label>
+                    <label className="block text-slate-700 font-bold mb-1">Badge Tag</label>
                     <input
                       type="text"
                       placeholder="e.g. Instant M-Pesa"
                       value={formData.badge}
                       onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Target Affiliate / Registration Link *</label>
+                  <label className="block text-slate-700 font-bold mb-1">Target Affiliate / Deal URL *</label>
                   <input
                     type="url"
                     required
                     placeholder="https://..."
                     value={formData.affiliate_url}
                     onChange={(e) => setFormData({ ...formData, affiliate_url: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Short Summary (1-2 sentences)</label>
+                  <label className="block text-slate-700 font-bold mb-1">Short Card Summary</label>
                   <textarea
                     rows={2}
-                    placeholder="Brief description visible on the card feed..."
                     value={formData.summary}
                     onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Detailed Description</label>
+                  <label className="block text-slate-700 font-bold mb-1">Detailed Description</label>
                   <textarea
                     rows={3}
-                    placeholder="Full overview of the deal and instructions..."
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Requirements (one per line)</label>
+                    <label className="block text-slate-700 font-bold mb-1">Requirements (one per line)</label>
                     <textarea
                       rows={3}
                       value={formData.requirements}
                       onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">Steps to Join (one per line)</label>
+                    <label className="block text-slate-700 font-bold mb-1">Steps to Join (one per line)</label>
                     <textarea
                       rows={3}
                       value={formData.steps}
                       onChange={(e) => setFormData({ ...formData, steps: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-[#008744]"
                     />
                   </div>
                 </div>
 
-                {/* Meta Ads Safety Toggle */}
-                <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-semibold text-white block">Meta Ads Compliant (Landing Safe)</span>
-                      <span className="text-[11px] text-slate-400">
-                        Keep enabled for work, microtasks, surveys. Disable if offer involves restricted dating/betting so Meta bots never see it.
-                      </span>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={formData.is_meta_safe}
-                      onChange={(e) => setFormData({ ...formData, is_meta_safe: e.target.checked })}
-                      className="w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500"
-                    />
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-slate-900 block">Meta Ads Safe (Review Safe)</span>
+                    <span className="text-[11px] text-slate-600">
+                      Enable for work, microtasks, transcription. Disable if sensitive so Facebook review bots never see it.
+                    </span>
                   </div>
+                  <input
+                    type="checkbox"
+                    checked={formData.is_meta_safe}
+                    onChange={(e) => setFormData({ ...formData, is_meta_safe: e.target.checked })}
+                    className="w-5 h-5 rounded text-[#008744] focus:ring-[#008744]"
+                  />
                 </div>
 
                 <div className="flex justify-end gap-2 pt-2">
                   <button
                     type="button"
                     onClick={() => setTab('deals')}
-                    className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+                    className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium shadow"
+                    className="px-5 py-2 rounded-lg bg-[#008744] hover:bg-[#007038] text-white font-bold shadow-sm"
                   >
                     {loading ? 'Saving...' : editingDeal ? 'Update Deal' : 'Publish Deal'}
                   </button>
