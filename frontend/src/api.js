@@ -35,13 +35,32 @@ export const getTrackingParams = () => {
   };
 };
 
-// Check if current visitor came from Meta Ads or has fbclid
+// Check if current visitor came from Meta Ads or has fbclid (persists for session)
 export const isMetaTraffic = () => {
+  if (typeof window === 'undefined') return false;
+  if (sessionStorage.getItem('pesadeals_meta_mode') === '1') return true;
+
   const { utm_source, fbclid } = getTrackingParams();
-  if (fbclid) return true;
-  if (!utm_source) return false;
-  const src = utm_source.toLowerCase();
-  return src.includes('meta') || src.includes('facebook') || src.includes('fb') || src.includes('ig') || src.includes('instagram');
+  const ref = (document.referrer || '').toLowerCase();
+  const src = (utm_source || '').toLowerCase();
+
+  const detected =
+    Boolean(fbclid) ||
+    src.includes('meta') ||
+    src.includes('facebook') ||
+    src === 'fb' ||
+    src.startsWith('fb_') ||
+    src === 'ig' ||
+    src.startsWith('ig_') ||
+    src.includes('instagram') ||
+    ref.includes('facebook.com') ||
+    ref.includes('instagram.com') ||
+    ref.includes('fb.com');
+
+  if (detected) {
+    sessionStorage.setItem('pesadeals_meta_mode', '1');
+  }
+  return detected;
 };
 
 // Fetch deals from API
@@ -53,6 +72,7 @@ export const fetchDeals = async (category = 'all', search = '') => {
   const tracking = getTrackingParams();
   if (tracking.utm_source) params.append('utm_source', tracking.utm_source);
   if (tracking.fbclid) params.append('fbclid', tracking.fbclid);
+  if (isMetaTraffic()) params.append('meta_safe', '1');
 
   try {
     const res = await fetch(`${API_BASE}/api/deals?${params.toString()}`);
@@ -67,7 +87,10 @@ export const fetchDeals = async (category = 'all', search = '') => {
 // Fetch single deal by slug
 export const fetchDealBySlug = async (slug) => {
   try {
-    const res = await fetch(`${API_BASE}/api/deals/${slug}`);
+    const params = new URLSearchParams();
+    if (isMetaTraffic()) params.append('meta_safe', '1');
+    const query = params.toString() ? `?${params.toString()}` : '';
+    const res = await fetch(`${API_BASE}/api/deals/${slug}${query}`);
     if (!res.ok) return null;
     const data = await res.json();
     return data.deal;
@@ -83,7 +106,6 @@ export const trackAndOpenDeal = async (deal) => {
   const visitorId = getVisitorId();
 
   try {
-    // Send click beacon to tracking endpoint
     const res = await fetch(`${API_BASE}/api/deals/${deal.id}/click`, {
       method: 'POST',
       headers: {

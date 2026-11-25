@@ -35,7 +35,7 @@ export default function LegalPage() {
             </div>
 
             <p>
-              <strong>1. Strict Non-Affiliation:</strong> All product names, logos, brands, and trademarks displayed on this site (including TaskArena, Mobicredits, Lovelane, BetPalace, Jumia, Remotasks, Premise, ySense, etc.) are the property of their respective trademark holders. The use of these names does not imply any affiliation, sponsorship, or official endorsement.
+              <strong>1. Strict Non-Affiliation:</strong> All product names, logos, brands, and trademarks displayed on this site are the property of their respective trademark holders. The use of these names does not imply any affiliation, sponsorship, or official endorsement.
             </p>
             <p>
               <strong>2. We Only Share Tips:</strong> Content published on PesaDeals Kenya is compiled solely for informational, educational, and discussion purposes. We are not an employer, broker, agent, or financial institution.

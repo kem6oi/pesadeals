@@ -23,7 +23,7 @@ function createAdminSession(username) {
 
 function isValidAdminAuth(keyOrToken) {
   if (!keyOrToken) return false;
-  return keyOrToken === ADMIN_SECRET || keyOrToken === ADMIN_PASSWORD || keyOrToken === 'victor_deals_2026!' || validTokens.has(keyOrToken);
+  return keyOrToken === ADMIN_SECRET || keyOrToken === ADMIN_PASSWORD || validTokens.has(keyOrToken);
 }
 
 // Middleware
@@ -82,8 +82,25 @@ function isMetaCrawlerOrAd(req) {
   const fbclid = req.query.fbclid;
 
   // Meta review bot user-agents
-  const isCrawler = ua.includes('facebookexternalhit') || ua.includes('facebot') || ua.includes('meta-externalagent');
-  const isMetaAdTraffic = Boolean(fbclid) || utmSource.includes('meta') || utmSource.includes('facebook') || utmSource.includes('fb') || utmSource.includes('ig') || ref.includes('facebook.com') || ref.includes('instagram.com');
+  const isCrawler =
+    ua.includes('facebookexternalhit') ||
+    ua.includes('facebot') ||
+    ua.includes('facebookbot') ||
+    ua.includes('meta-externalagent') ||
+    ua.includes('meta-externalfetcher');
+
+  const isMetaAdTraffic =
+    Boolean(fbclid) ||
+    utmSource.includes('meta') ||
+    utmSource.includes('facebook') ||
+    utmSource === 'fb' ||
+    utmSource.startsWith('fb_') ||
+    utmSource === 'ig' ||
+    utmSource.startsWith('ig_') ||
+    utmSource.includes('instagram') ||
+    ref.includes('facebook.com') ||
+    ref.includes('instagram.com') ||
+    ref.includes('fb.com');
 
   return { isCrawler, isMetaAdTraffic };
 }
@@ -164,15 +181,19 @@ app.get('/api/deals', (req, res) => {
 // Get single deal
 app.get('/api/deals/:idOrSlug', (req, res) => {
   const { idOrSlug } = req.params;
+  const { meta_safe } = req.query;
+  const { isCrawler, isMetaAdTraffic } = isMetaCrawlerOrAd(req);
+  const enforceMetaSafe = isCrawler || isMetaAdTraffic || meta_safe === '1' || meta_safe === 'true';
+
   try {
     let deal;
     if (/^\d+$/.test(idOrSlug)) {
-      deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(idOrSlug);
+      deal = db.prepare("SELECT * FROM deals WHERE id = ? AND status = 'active'").get(idOrSlug);
     } else {
-      deal = db.prepare('SELECT * FROM deals WHERE slug = ?').get(idOrSlug);
+      deal = db.prepare("SELECT * FROM deals WHERE slug = ? AND status = 'active'").get(idOrSlug);
     }
 
-    if (!deal) {
+    if (!deal || (enforceMetaSafe && !deal.is_meta_safe)) {
       return res.status(404).json({ error: 'Deal not found' });
     }
 
@@ -254,12 +275,18 @@ app.post('/api/deals/:id/click', (req, res) => {
   }
 });
 
-// Direct Redirect Tracking Endpoint (e.g., https://yourserver.com/r/remotasks-ai-training?utm_source=meta)
+// Direct Redirect Tracking Endpoint (e.g., https://pesadeals.duckdns.org/r/taskarena?utm_source=meta)
 app.get('/r/:slug', (req, res) => {
   const { slug } = req.params;
-  const deal = db.prepare('SELECT * FROM deals WHERE slug = ?').get(slug);
+  const { isCrawler } = isMetaCrawlerOrAd(req);
+  let deal;
+  if (/^\d+$/.test(slug)) {
+    deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(slug);
+  } else {
+    deal = db.prepare('SELECT * FROM deals WHERE slug = ?').get(slug);
+  }
 
-  if (!deal) {
+  if (!deal || (isCrawler && !deal.is_meta_safe)) {
     return res.status(404).send('Deal not found or has expired.');
   }
 
@@ -319,7 +346,7 @@ app.post('/api/admin/login', (req, res) => {
   const normalizedUser = (username || '').trim().toLowerCase();
 
   const isUserValid = normalizedUser === ADMIN_USERNAME.toLowerCase() || normalizedUser === 'admin';
-  const isPassValid = password === ADMIN_PASSWORD || password === ADMIN_SECRET || password === 'victor_deals_2026!';
+  const isPassValid = password === ADMIN_PASSWORD || password === ADMIN_SECRET;
 
   if (isUserValid && isPassValid) {
     const token = createAdminSession('admin');
@@ -506,7 +533,7 @@ app.get('/api/admin/analytics', requireAdmin, (req, res) => {
 
     // Top deals by clicks
     const topDeals = db.prepare(`
-      SELECT d.id, d.title, d.category, d.click_count, COUNT(c.id) as tracked_clicks,
+      SELECT d.id, d.title, d.slug, d.category, d.click_count, COUNT(c.id) as tracked_clicks,
              COUNT(DISTINCT c.visitor_id) as unique_users
       FROM deals d
       LEFT JOIN clicks c ON d.id = c.deal_id
