@@ -1,10 +1,8 @@
 // Client-side API helper & Click Tracking handler
 const getBackendUrl = () => {
-  // If configured in environment (e.g. Cloudflare Pages environment variable VITE_API_BASE_URL)
   if (import.meta.env.VITE_API_BASE_URL) {
     return import.meta.env.VITE_API_BASE_URL;
   }
-  // Default production HTTPS backend
   return 'https://pesadeals.duckdns.org';
 };
 
@@ -21,11 +19,11 @@ export const getVisitorId = () => {
   return vid;
 };
 
-// Parse URL params for UTMs and tracking
+// Parse and persist URL UTM/ad tracking params across client-side navigation
 export const getTrackingParams = () => {
   if (typeof window === 'undefined') return {};
   const params = new URLSearchParams(window.location.search);
-  return {
+  const urlUtms = {
     utm_source: params.get('utm_source') || '',
     utm_medium: params.get('utm_medium') || '',
     utm_campaign: params.get('utm_campaign') || '',
@@ -33,18 +31,31 @@ export const getTrackingParams = () => {
     utm_term: params.get('utm_term') || '',
     fbclid: params.get('fbclid') || ''
   };
+
+  // Persist initial attribution in sessionStorage so clicks after navigating to / are still attributed to the ad
+  if (urlUtms.utm_source || urlUtms.fbclid || urlUtms.utm_campaign) {
+    sessionStorage.setItem('pesadeals_utms', JSON.stringify(urlUtms));
+    return urlUtms;
+  }
+
+  try {
+    const saved = sessionStorage.getItem('pesadeals_utms');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    // ignore storage errors
+  }
+
+  return urlUtms;
 };
 
-// Check if current visitor came from Meta Ads or has fbclid (persists for session)
+// Detect if visitor session originated from Meta Ads (used for subtle UI badge & attribution)
 export const isMetaTraffic = () => {
   if (typeof window === 'undefined') return false;
-  if (sessionStorage.getItem('pesadeals_meta_mode') === '1') return true;
-
   const { utm_source, fbclid } = getTrackingParams();
   const ref = (document.referrer || '').toLowerCase();
   const src = (utm_source || '').toLowerCase();
 
-  const detected =
+  return (
     Boolean(fbclid) ||
     src.includes('meta') ||
     src.includes('facebook') ||
@@ -55,24 +66,23 @@ export const isMetaTraffic = () => {
     src.includes('instagram') ||
     ref.includes('facebook.com') ||
     ref.includes('instagram.com') ||
-    ref.includes('fb.com');
-
-  if (detected) {
-    sessionStorage.setItem('pesadeals_meta_mode', '1');
-  }
-  return detected;
+    ref.includes('fb.com')
+  );
 };
 
-// Fetch deals from API
+// Fetch all active deals for the catalog
 export const fetchDeals = async (category = 'all', search = '') => {
   const params = new URLSearchParams();
   if (category && category !== 'all') params.append('category', category);
   if (search) params.append('search', search);
 
-  const tracking = getTrackingParams();
-  if (tracking.utm_source) params.append('utm_source', tracking.utm_source);
-  if (tracking.fbclid) params.append('fbclid', tracking.fbclid);
-  if (isMetaTraffic()) params.append('meta_safe', '1');
+  // Only enforce meta_safe=1 if explicitly requested in the URL (?meta_safe=1)
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('meta_safe') === '1') {
+      params.append('meta_safe', '1');
+    }
+  }
 
   try {
     const res = await fetch(`${API_BASE}/api/deals?${params.toString()}`);
@@ -87,10 +97,7 @@ export const fetchDeals = async (category = 'all', search = '') => {
 // Fetch single deal by slug
 export const fetchDealBySlug = async (slug) => {
   try {
-    const params = new URLSearchParams();
-    if (isMetaTraffic()) params.append('meta_safe', '1');
-    const query = params.toString() ? `?${params.toString()}` : '';
-    const res = await fetch(`${API_BASE}/api/deals/${slug}${query}`);
+    const res = await fetch(`${API_BASE}/api/deals/${slug}`);
     if (!res.ok) return null;
     const data = await res.json();
     return data.deal;

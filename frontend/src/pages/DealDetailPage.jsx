@@ -202,13 +202,20 @@ export default function DealDetailPage() {
         </div>
       </article>
 
-      {/* Back button at footer */}
-      <div className="text-center pb-8">
+      {/* Explore More Tips Card (Option 2 Funnel Bridge) */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm text-center mb-8">
+        <h3 className="text-sm font-extrabold text-slate-900 mb-1">
+          Want to see more ways to earn online in Kenya?
+        </h3>
+        <p className="text-xs text-slate-500 mb-4 max-w-md mx-auto leading-relaxed">
+          Browse our full directory of AI training tasks, social chat platforms, mobile credit options, and daily promos.
+        </p>
         <Link
           to="/"
-          className="text-xs font-bold text-[#008744] hover:underline"
+          className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-sm active:scale-95 transition-all"
         >
-          ← Browse More Money-Making Tips
+          <span>Explore All Tips & Platforms</span>
+          <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
         </Link>
       </div>
     </div>

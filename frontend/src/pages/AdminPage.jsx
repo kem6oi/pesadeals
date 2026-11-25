@@ -150,7 +150,7 @@ export default function AdminPage() {
   };
 
   const copyTrackingLink = (slug) => {
-    const url = `https://pesadeals.duckdns.org/r/${slug}?utm_source=meta&utm_campaign=ad_campaign_1`;
+    const url = `https://pesadeals.pages.dev/deal/${slug}?utm_source=meta&utm_campaign=ad_campaign_1`;
     navigator.clipboard.writeText(url);
     setCopiedSlug(slug);
     setTimeout(() => setCopiedSlug(null), 2000);
@@ -734,13 +734,13 @@ export default function AdminPage() {
       {/* =================================================================== */}
       {tab === 'deals' && (
         <div className="space-y-3.5">
-          {/* Meta Ads Protection Status Card */}
+          {/* Meta Ads Strategy Card */}
           <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#008744] shrink-0 mt-0.5" />
             <div className="text-xs text-emerald-950 leading-relaxed">
-              <strong className="block font-extrabold">Meta Ads Shield Status</strong>
+              <strong className="block font-extrabold">Meta Ads Landing Strategy (Option 2 Active)</strong>
               <span>
-                <strong>{metaSafeCount}</strong> deals are Meta-safe. <strong>{gatedCount}</strong> restricted deals (dating/betting) are automatically hidden whenever Meta bots, Facebook/Instagram referrers, or <code className="bg-white/80 px-1 rounded">?utm_source=meta</code> links are used.
+                Copy the <strong>Ad Link</strong> for a compliant guide like <strong>TaskArena</strong> (<code className="bg-white/80 px-1 rounded">/deal/taskarena?utm_source=meta</code>). Meta reviews that clean page while real Facebook visitors can browse the full catalog (including <strong>Lovelane</strong>) with full UTM attribution preserved.
               </span>
             </div>
           </div>

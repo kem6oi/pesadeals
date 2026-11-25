@@ -134,10 +134,10 @@ app.get('/api/health', (req, res) => {
 // Get deals listing
 app.get('/api/deals', (req, res) => {
   const { category, search, meta_safe } = req.query;
-  const { isCrawler, isMetaAdTraffic } = isMetaCrawlerOrAd(req);
+  const { isCrawler } = isMetaCrawlerOrAd(req);
 
-  // If traffic originates from Meta ad or crawler, or if explicit meta_safe is requested, enforce Meta-safe deals only
-  const enforceMetaSafe = isCrawler || isMetaAdTraffic || meta_safe === '1' || meta_safe === 'true';
+  // Filter restricted items only for explicit meta_safe=1 or Meta crawler bots; real Facebook ad users browsing the catalog see all active deals
+  const enforceMetaSafe = isCrawler || meta_safe === '1' || meta_safe === 'true';
 
   let query = "SELECT * FROM deals WHERE status = 'active'";
   const params = [];
@@ -182,8 +182,8 @@ app.get('/api/deals', (req, res) => {
 app.get('/api/deals/:idOrSlug', (req, res) => {
   const { idOrSlug } = req.params;
   const { meta_safe } = req.query;
-  const { isCrawler, isMetaAdTraffic } = isMetaCrawlerOrAd(req);
-  const enforceMetaSafe = isCrawler || isMetaAdTraffic || meta_safe === '1' || meta_safe === 'true';
+  const { isCrawler } = isMetaCrawlerOrAd(req);
+  const enforceMetaSafe = isCrawler || meta_safe === '1' || meta_safe === 'true';
 
   try {
     let deal;

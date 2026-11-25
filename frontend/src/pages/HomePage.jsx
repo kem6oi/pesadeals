@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Info, CheckCircle2 } from 'lucide-react';
 import DealCard from '../components/DealCard';
-import { fetchDeals, trackAndOpenDeal, isMetaTraffic } from '../api';
+import { fetchDeals, trackAndOpenDeal } from '../api';
 
 const ALL_CATEGORIES = [
   { id: 'all', label: 'All Tips & Ideas' },
@@ -19,11 +19,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const metaSafeActive = isMetaTraffic();
 
-  const visibleCategories = metaSafeActive
-    ? ALL_CATEGORIES.filter((c) => c.id !== 'dating' && c.id !== 'betting')
-    : ALL_CATEGORIES;
+  const visibleCategories = ALL_CATEGORIES;
 
   useEffect(() => {
     const load = async () => {
